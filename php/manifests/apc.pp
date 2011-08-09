@@ -1,9 +1,11 @@
 
-class php::apc {
+class php::apc(
+  $enabled  = 1,
+  $shm_size = "128M",
+  $rfc1867  = 1
+){
+
   php::extension { 'pecl-apc': }
-  
-  $enabled = 1
-  $shm_size = "128M"
   
   file {
     "apc.ini":
