@@ -969,7 +969,7 @@ BrowserMatch "^Dreamweaver-WebDAV-SCM1" redirect-carefully
 #
 # Use name-based virtual hosting.
 #
-#NameVirtualHost *:80
+NameVirtualHost *:<%= scope.lookupvar('apache::params::keepalive') %>
 #
 # NOTE: NameVirtualHost cannot be used without a port specifier 
 # (e.g. :80) if mod_ssl is being used, due to the nature of the
