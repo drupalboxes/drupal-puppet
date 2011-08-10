@@ -7,7 +7,8 @@ class apache::params(
   $timeout           = $apache::params::default::timeout,
   $keepalive         = $apache::params::default::keepalive,
   $port              = $apache::params::default::port,
-  $serversignature   = $apache::params::default::serversignature
+  $serversignature   = $apache::params::default::serversignature,
+  $vhostdir          = $apache::params::default::vhostdir
 ) inherits apache::params::default {
 
 }

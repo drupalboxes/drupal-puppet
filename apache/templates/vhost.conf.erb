@@ -1,0 +1,10 @@
+<VirtualHost *:<%= port %>>
+  ServerName <%= name %>
+  <% if serveraliases != "" -%>
+   ServerAlias <%= serveraliases %>
+  <% end -%>
+  DocumentRoot <%= documentroot %>
+  <Location>
+    Options +Includes
+  </Location>
+</VirtualHost>

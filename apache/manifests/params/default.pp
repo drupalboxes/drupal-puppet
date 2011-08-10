@@ -18,6 +18,10 @@ class apache::params::default {
     default   => "/etc/httpd/conf/httpd.conf"
   }
   
+  $vhostdir = $operatingsystem ? {
+    default   => "/etc/httpd/conf.d"
+  }
+  
   $timeout = 120
   $keepalive = "On"
   $port = 80
