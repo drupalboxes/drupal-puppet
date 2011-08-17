@@ -32,5 +32,6 @@ class memcached::config {
 }
 
 class memcached {
+  include memcached::params
   include memcached::install, memcached::config, memcached::service
 }

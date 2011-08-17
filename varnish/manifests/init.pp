@@ -31,5 +31,6 @@ class varnish::config {
 
 
 class varnish {
+  include varnish::params
   include varnish::install, varnish::config, varnish::service
 }

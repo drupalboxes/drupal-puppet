@@ -24,5 +24,6 @@ class php::config {
 }
 
 class php {
+  include php::params
   include php::install, php::config
 }

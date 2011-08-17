@@ -28,8 +28,6 @@ class apache::config {
 }
 
 class apache {
-#  class {'apache::params':
-#    timeout => 60
-#  }
+  include apache::params
   include apache::install, apache::service, apache::config
 }
