@@ -13,11 +13,20 @@ class drupal::base {
     ensure => present,
   }
 
+  File { 
+    owner  => $drupal::params::file_owner,
+    group  => $drupal::params::file_group
+  }
+
+
   file { "install_path":
     path   => $drupal::params::install_path,
     ensure => directory,
-    owner  => $drupal::params::file_owner,
-    group  => $drupal::params::file_group
+  }
+
+  file { "platforms":
+    path   => "$drupal::params::install_path/platforms",
+    ensure => directory
   }
 }
 

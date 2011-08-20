@@ -1,4 +1,4 @@
 
-define drupal::platform( name, type, version = "latest" ) {
+define drupal::platform( name, type, source ) {
 
 }
