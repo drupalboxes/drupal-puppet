@@ -28,6 +28,11 @@ class drupal::base {
     path   => "$drupal::params::install_path/platforms",
     ensure => directory
   }
+
+  file { "platform_sources":
+    path   => "$drupal::params::install_path/platform_sources",
+    ensure => directory
+  }
 }
 
 class drupal {
