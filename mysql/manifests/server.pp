@@ -18,7 +18,7 @@ class mysql::server::service {
 
 class mysql::server::config {
   file {
-    "my.cnf":
+    "mysql/my.cnf":
       path      => "$mysql::params::my_cnf",
       require   => Class["mysql::server::install"],
       notify    => Class["mysql::server::service"],

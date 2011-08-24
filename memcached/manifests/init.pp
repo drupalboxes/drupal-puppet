@@ -23,7 +23,7 @@ class memcached::config {
   $options = $memcached::params::options
 
   file {
-    "sysconfig":
+    "memcached/sysconfig":
       path      => "$memcached::params::sysconfig",
       require   => Class["memcached::install"],
       notify    => Class["memcached::service"],

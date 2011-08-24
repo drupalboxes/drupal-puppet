@@ -19,7 +19,7 @@ class apache::service {
 
 class apache::config {
   file {
-    "httpd.conf":
+    "apache/httpd.conf":
       path      => "$apache::params::httpd_conf",
       require   => Class["apache::install"],
       notify    => Class["apache::service"],
