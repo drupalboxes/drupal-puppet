@@ -19,6 +19,7 @@ class varnish::service {
 class varnish::config {
   $backend_host = $varnish::params::backend_host
   $backend_port = $varnish::params::backend_port
+  $default_vcl  = $varnish::params::default_vcl
 
   file {
     "varnish/default.vcl":
