@@ -27,6 +27,14 @@ class varnish::config {
       notify    => Class["varnish::service"],
       content   => template("varnish/default.vcl.erb")
   }
+  
+  file {
+    "varnish/sysconfig":
+      path      => "$varnish::params::sysconfig",
+      require   => Class["varnish::install"],
+      notify    => Class["varnish::service"],
+      content   => template("varnish/sysconfig.erb")
+  }
 }
 
 

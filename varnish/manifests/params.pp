@@ -5,7 +5,8 @@ class varnish::params(
   $default_vcl  = "/etc/varnish/default.vcl",
   $version      = "present",
   $package      = "varnish",
-  $service      = "varnish"
+  $service      = "varnish",
+  $sysconfig    = "/etc/sysconfig/varnish"
 ) {
 
 }
