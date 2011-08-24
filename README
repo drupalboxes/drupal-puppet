@@ -1,0 +1,11 @@
+Drupalboxes Puppet Modules
+==========================
+
+A handy set of Puppet modules for managing Drupal and the LAMP stack.
+
+To make use of the modules, make sure they're in your Puppet module path, and
+include them in your manifests.
+
+The classes are designed to be easy to re-use, and the 'params' classes are
+designed to be instantiated with parameters that override basic configuration
+for the module.
