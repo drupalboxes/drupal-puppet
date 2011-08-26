@@ -16,16 +16,6 @@ class mysql::server::service {
   }
 }
 
-class mysql::server::config {
-  file {
-    "mysql/my.cnf":
-      path      => "$mysql::params::my_cnf",
-      require   => Class["mysql::server::install"],
-      notify    => Class["mysql::server::service"],
-      content   => template("mysql/my.cnf.erb")
-  }
-}
-
 class mysql::server {
   include mysql
   include mysql::server::install,

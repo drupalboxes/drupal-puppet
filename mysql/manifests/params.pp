@@ -8,7 +8,7 @@ class mysql::params(
   $my_cnf         = "/etc/my.cnf",
   $mysql_user     = "mysql",
   $port             = "3306",
-  $socket           = "/var/lib/mysql/mysql.sock",
+  $socket           = "/var/lib/mysql/mysql.sock"
 ) {
 
 }
