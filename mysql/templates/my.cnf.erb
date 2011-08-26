@@ -1,7 +1,8 @@
 [mysqld]
 datadir=/var/lib/mysql
-socket=/var/lib/mysql/mysql.sock
-user=mysql
+socket=<%= socket %>
+user=<%= user %>
+port=<%= port %>
 # Disabling symbolic-links is recommended to prevent assorted security risks
 symbolic-links=0
 

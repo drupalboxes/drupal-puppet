@@ -6,7 +6,9 @@ class mysql::params(
   $server_package = "mysql-server",
   $service        = "mysqld",
   $my_cnf         = "/etc/my.cnf",
-  $mysql_user     = "mysql"
+  $mysql_user     = "mysql",
+  $port             = "3306",
+  $socket           = "/var/lib/mysql/mysql.sock",
 ) {
 
 }
