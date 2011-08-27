@@ -6,8 +6,8 @@ class mysql::config {
   $socket = $mysql::params::socket
 
   file {
-    "mysql/my.cnf":
+    'mysql/my.cnf':
       path      => $mysql::params::my_cnf,
-      content   => template("mysql/my.cnf.erb")
+      content   => template('mysql/my.cnf.erb')
   }
 }

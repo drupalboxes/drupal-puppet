@@ -1,15 +1,15 @@
 
 
 class drupal::base {
-  user { "drupal":
-    ensure => present,
-    comment => "Drupal user",
-    gid => "drupal",
-    shell => "/bin/false",
-    require => Group["drupal"],
+  user { 'drupal':
+    ensure  => present,
+    comment => 'Drupal user',
+    gid     => 'drupal',
+    shell   => '/bin/false',
+    require => Group['drupal'],
   }
 
-  group { "drupal":
+  group { 'drupal':
     ensure => present,
   }
 
@@ -19,18 +19,18 @@ class drupal::base {
   }
 
 
-  file { "install_path":
+  file { 'install_path':
     path   => $drupal::params::install_path,
     ensure => directory,
   }
 
-  file { "platforms":
-    path   => "$drupal::params::install_path/platforms",
+  file { 'platforms':
+    path   => "${drupal::params::install_path}/platforms",
     ensure => directory
   }
 
-  file { "platform_sources":
-    path   => "$drupal::params::install_path/platform_sources",
+  file { 'platform_sources':
+    path   => "${drupal::params::install_path}/platform_sources",
     ensure => directory
   }
 }

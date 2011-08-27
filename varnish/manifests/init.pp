@@ -1,18 +1,18 @@
 
 class varnish::install {
-  package { "varnish":
-    name    => "$varnish::params::package",
-    ensure  => "$varnish::params::version",
+  package { 'varnish':
+    name    => $varnish::params::package,
+    ensure  => $varnish::params::version,
   }
 }
 
 class varnish::service {
-  service { "varnish":
-    name => "$varnish::params::service",
+  service { 'varnish':
+    name => $varnish::params::service,
     hasstatus   => true,
     hasrestart  => true,
     enable      => true,
-    require     => Class["varnish::install"],
+    require     => Class['varnish::install'],
   }
 }
 
@@ -22,19 +22,19 @@ class varnish::config {
   $default_vcl  = $varnish::params::default_vcl
 
   file {
-    "varnish/default.vcl":
-      path      => "$varnish::params::default_vcl",
-      require   => Class["varnish::install"],
-      notify    => Class["varnish::service"],
-      content   => template("varnish/default.vcl.erb")
+    'varnish/default.vcl':
+      path      => $varnish::params::default_vcl,
+      require   => Class['varnish::install'],
+      notify    => Class['varnish::service'],
+      content   => template('varnish/default.vcl.erb')
   }
   
   file {
-    "varnish/sysconfig":
-      path      => "$varnish::params::sysconfig",
-      require   => Class["varnish::install"],
-      notify    => Class["varnish::service"],
-      content   => template("varnish/sysconfig.erb")
+    'varnish/sysconfig':
+      path      => $varnish::params::sysconfig,
+      require   => Class['varnish::install'],
+      notify    => Class['varnish::service'],
+      content   => template('varnish/sysconfig.erb')
   }
 }
 

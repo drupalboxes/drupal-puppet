@@ -6,9 +6,8 @@ class mysql::server::config {
     source => 'mysql/mysql.aug'
   }
   
-  augeas { "my.cnf/mysqld":
-    context => "/files/etc/my.cnf/mysqld",
-    #load_path => "/usr/share/augeas/lenses/contrib/",
+  augeas { 'my.cnf/mysqld':
+    context => '/files/etc/my.cnf/mysqld',
     changes => [
       "set pid-file /var/run/mysqld/mysqld.pid",
       "set old_passwords 0",
@@ -18,7 +17,7 @@ class mysql::server::config {
     require => [
       Class['augeas::config'],
       Augeas::Lens['mysql.aug'],
-      Class["mysql::config"]
+      Class['mysql::config']
     ]
   }
 }
