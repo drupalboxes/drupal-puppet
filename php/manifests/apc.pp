@@ -1,7 +1,7 @@
 
 class php::apc(
   $enabled  = 1,
-  $shm_size = "128M",
+  $shm_size = '128M',
   $rfc1867  = 1
 ){
 
@@ -9,10 +9,10 @@ class php::apc(
   
   file {
     "apc.ini":
-      path      => "$php::params::php_dir/apc.ini",
-      require   => Class["php::install"],
-      notify    => Class["apache::service"],
-      content   => template("php/apc.ini.erb")
+      path      => "${php::params::php_dir}/apc.ini",
+      require   => Class['php::install'],
+      notify    => Class['apache::service'],
+      content   => template('php/apc.ini.erb')
   }
   
 }

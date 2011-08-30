@@ -6,7 +6,7 @@ define php::extension {
   package { "php-${name}":
     name   => "$php::params::package-${name}",
     ensure => present,
-    notify => Class["apache::service"]
+    notify => Class['apache::service']
   }
 
 }
