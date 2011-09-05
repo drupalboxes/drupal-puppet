@@ -1,7 +1,8 @@
 
 class mysql::server {
   include mysql
-  include mysql::server::install,
+  include mysql::server::params,
+          mysql::server::install,
           mysql::server::service,
           mysql::server::config
 }
