@@ -3,7 +3,7 @@ class mysql::server::config {
   include augeas
   
   augeas::lens { 'mysql.aug':
-    source => 'mysql/mysql.aug'
+    source => 'puppet:///modules/mysql/mysql.aug'
   }
   
   Augeas {
