@@ -23,6 +23,7 @@ class varnish::config {
   $default_vcl        = $varnish::params::default_vcl
   $listen_port        = $varnish::params::listen_port
   $admin_listen_port  = $varnish::params::admin_listen_port
+  $purge_ips          = $varnish::params::purge_ips
 
   file {
     'varnish/default.vcl':
