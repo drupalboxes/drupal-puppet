@@ -8,6 +8,7 @@ class varnish::install {
 
 class varnish::service {
   service { 'varnish':
+    ensure      => running,
     name => $varnish::params::service,
     hasstatus   => true,
     hasrestart  => true,

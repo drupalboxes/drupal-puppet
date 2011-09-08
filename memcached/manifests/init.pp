@@ -8,6 +8,7 @@ class memcached::install {
 
 class memcached::service {
   service { 'memcached':
+    ensure      => running,
     name        => $memcached::params::service,
     hasstatus   => true,
     hasrestart  => true,
