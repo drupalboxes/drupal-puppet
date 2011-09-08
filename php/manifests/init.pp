@@ -14,6 +14,10 @@ class php::install {
 }
 
 class php::config {
+  $display_errors = $php::params::display_errors
+  $upload_max_filesize = $php::params::upload_max_filesize
+  $post_max_size = $php::params::post_max_size
+
   file {
     'php.ini':
       path      => "${php::params::php_ini}",
