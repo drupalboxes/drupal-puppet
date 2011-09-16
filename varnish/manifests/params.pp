@@ -8,7 +8,8 @@ class varnish::params(
   $version            = present,
   $package            = 'varnish',
   $service            = 'varnish',
-  $sysconfig          = '/etc/sysconfig/varnish'
+  $sysconfig          = '/etc/sysconfig/varnish',
+  $purge_ips          = [ '127.0.0.1' ]
 ) {
 
 }

@@ -357,7 +357,7 @@ error_reporting  =  E_ALL & ~E_NOTICE
 ; instead (see below).  Keeping display_errors enabled on a production web site
 ; may reveal security information to end users, such as file paths on your Web
 ; server, your database schema or other information.
-display_errors = On
+display_errors = <%= display_errors %>
 
 ; Even when display_errors is on, errors that occur during PHP's startup
 ; sequence are not displayed.  It's strongly recommended to keep
@@ -416,7 +416,7 @@ track_errors = Off
 ;error_log = filename
 
 ; Log errors to syslog (Event Log on NT, not valid in Windows 95).
-error_log = syslog
+;error_log = syslog
 
 
 ;;;;;;;;;;;;;;;;;
@@ -469,7 +469,7 @@ register_argc_argv = Off
 auto_globals_jit = On
 
 ; Maximum size of POST data that PHP will accept.
-post_max_size = 8M
+post_max_size = <%= post_max_size %>
 
 ; Magic quotes
 ;
@@ -574,7 +574,7 @@ file_uploads = On
 ;upload_tmp_dir =
 
 ; Maximum allowed size for uploaded files.
-upload_max_filesize = 8M
+upload_max_filesize = <%= upload_max_filesize %>
 
 
 ;;;;;;;;;;;;;;;;;;

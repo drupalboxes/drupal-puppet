@@ -9,6 +9,7 @@ class apache::install {
 
 class apache::service {
   service { 'apache':
+    ensure      => running,
     name        => $apache::params::service,
     hasstatus   => true,
     hasrestart  => true,
