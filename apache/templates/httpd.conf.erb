@@ -193,8 +193,8 @@ LoadModule proxy_connect_module modules/mod_proxy_connect.so
 LoadModule cache_module modules/mod_cache.so
 LoadModule suexec_module modules/mod_suexec.so
 LoadModule disk_cache_module modules/mod_disk_cache.so
-LoadModule file_cache_module modules/mod_file_cache.so
-LoadModule mem_cache_module modules/mod_mem_cache.so
+#LoadModule file_cache_module modules/mod_file_cache.so
+#LoadModule mem_cache_module modules/mod_mem_cache.so
 LoadModule cgi_module modules/mod_cgi.so
 LoadModule version_module modules/mod_version.so
 
@@ -207,7 +207,7 @@ LoadModule version_module modules/mod_version.so
 #
 # Load config files from the config directory "/etc/httpd/conf.d".
 #
-NameVirtualHost *:80
+NameVirtualHost *:<%= scope.lookupvar('apache::params::port') %>
 Include conf.d/*.conf
 
 #
@@ -969,7 +969,7 @@ BrowserMatch "^Dreamweaver-WebDAV-SCM1" redirect-carefully
 #
 # Use name-based virtual hosting.
 #
-NameVirtualHost *:<%= scope.lookupvar('apache::params::port') %>
+
 #
 # NOTE: NameVirtualHost cannot be used without a port specifier 
 # (e.g. :80) if mod_ssl is being used, due to the nature of the
