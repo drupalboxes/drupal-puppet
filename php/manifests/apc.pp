@@ -1,7 +1,7 @@
 
 class php::apc(
   $enabled  = 1,
-  $shm_size = '128M',
+  $shm_size = '128',
   $rfc1867  = 1
 ){
 
