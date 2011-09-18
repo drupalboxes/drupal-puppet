@@ -1,9 +1,9 @@
 
 class drush::install {
-  realize Repos::Yum['base/el/repos/drupalboxes']
+  realize Repos::Yum['drupalboxes']
   package { 'drush':
     ensure   => $drush::version,
     name     => $drush::package,
-    require  => Repos::Yum['base/el/repos/drupalboxes']
+    require  => Repos::Yum['drupalboxes']
   }
 }
