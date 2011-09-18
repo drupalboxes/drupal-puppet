@@ -10,7 +10,7 @@ class mysql::server::params(
   $mysqld_myisam_sort_buffer_size  = '8M',
   $mysqld_max_connections          = '256',
   $mysqld_default_storage_engine   = 'innodb',
-  $mysqld_binlog_format            = 'mixed',
+  $mysqld_binlog_format            = 'row',
   $mysqld_server_id                = '1',
   
   $mysqld_innodb_buffer_pool_size        = '16M',

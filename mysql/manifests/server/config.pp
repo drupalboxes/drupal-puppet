@@ -29,7 +29,7 @@ class mysql::server::config {
       "set myisam_sort_buffer_size ${mysql::server::params::mysqld_myisam_sort_buffer_size}",
       "set max_connections ${mysql::server::params::mysqld_max_connections}",
       "set default_storage_engine ${mysql::server::params::mysqld_default_storage_engine}",
-      "set binlog_format ${mysql::server::params::mysqld_binlog_format}",
+#      "set binlog_format ${mysql::server::params::mysqld_binlog_format}",
       "set server_id ${mysql::server::params::mysqld_server_id}",
       "set innodb_buffer_pool_size ${mysql::server::params::mysqld_innodb_buffer_pool_size}",
       "set innodb_flush_log_at_trx_commit ${mysql::server::params::mysqld_innodb_flush_log_at_trx_commit}",
