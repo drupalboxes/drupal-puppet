@@ -33,7 +33,7 @@ define repos::yum(
     exclude         => $exclude,
     failovermethod  => $failovermethod,
     gpgcheck        => $gpgcheck,
-    gpgkey          => $gpgkey ? { absent => absent, default => "file://${gpgkey_path}" },
+    gpgkey          => $gpgkey_path ? { absent => absent, default => "file://${gpgkey_path}" },
     includepkgs     => $includepkgs,
     keepalive       => $keepalive,
     mirrorlist      => $mirrorlist,

@@ -1,8 +1,18 @@
 
 class varnish::install {
+  repos::yum { 'varnish':
+    enabled         => 1,
+    descr           => 'Varnish 3.0 for Enterprise Linux 5 - $basearch',
+    gpgcheck        => 0,
+    baseurl         => 'http://repo.varnish-cache.org/redhat/varnish-3.0/el5/$basearch',
+    priority        => 1,
+    reponame        => 'varnish-3.0'
+  }
+  
   package { 'varnish':
     name    => $varnish::params::package,
     ensure  => $varnish::params::version,
+    require => Repos::Yum['varnish']
   }
 }
 

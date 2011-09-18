@@ -1,5 +1,6 @@
 
 class base {
-  include base::el::repos::ius, base::el::repos::drupalboxes
-  realize (Repos::Yum['base/el/repos/ius'], Repos::Yum['base/el/repos/drupalboxes'])
+  include base::el::repos
+          
+  Repos::Yum <| title == 'ius' or title == 'epel' or title == 'drupalboxes' |>
 }
