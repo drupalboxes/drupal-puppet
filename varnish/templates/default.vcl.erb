@@ -1,126 +1,235 @@
-#This is a basic VCL configuration file for varnish.  See the vcl(7)
-#man page for details on VCL syntax and semantics.
-#
-#Default backend definition.  Set this to point to your content
-#server.
-#
-backend default {
+
+backend drupal {
   .host = "<%= backend_host %>";
   .port = "<%= backend_port %>";
+  .probe = {
+    .url = "/";
+    .interval = 30s;
+    .timeout = 10s;
+    .window = 5;
+    .threshold = 3;
+  }
 }
-#
-#Below is a commented-out copy of the default VCL logic.  If you
-#redefine any of these subroutines, the built-in logic will be
-#appended to your code.
-#
-#sub vcl_recv {
-#    if (req.request != "GET" &&
-#      req.request != "HEAD" &&
-#      req.request != "PUT" &&
-#      req.request != "POST" &&
-#      req.request != "TRACE" &&
-#      req.request != "OPTIONS" &&
-#      req.request != "DELETE") {
-#        /* Non-RFC2616 or CONNECT which is weird. */
-#        return (pipe);
-#    }
-#    if (req.request != "GET" && req.request != "HEAD") {
-#        /* We only deal with GET and HEAD by default */
-#        return (pass);
-#    }
-#    if (req.http.Authorization || req.http.Cookie) {
-#        /* Not cacheable by default */
-#        return (pass);
-#    }
-#    return (lookup);
-#}
-#
-#sub vcl_pipe {
-#    # Note that only the first request to the backend will have
-#    # X-Forwarded-For set.  If you use X-Forwarded-For and want to
-#    # have it set for all requests, make sure to have:
-#    # set req.http.connection = "close";
-#    # here.  It is not set by default as it might break some broken web
-#    # applications, like IIS with NTLM authentication.
-#    return (pipe);
-#}
-#
-#sub vcl_pass {
-#    return (pass);
-#}
-#
-#sub vcl_hash {
-#    set req.hash += req.url;
-#    if (req.http.host) {
-#        set req.hash += req.http.host;
-#    } else {
-#        set req.hash += server.ip;
-#    }
-#    return (hash);
-#}
-#
-#sub vcl_hit {
-#    if (!obj.cacheable) {
-#        return (pass);
-#    }
-#    return (deliver);
-#}
-#
-#sub vcl_miss {
-#    return (fetch);
-#}
-#
-#sub vcl_fetch {
-#    if (!obj.cacheable) {
-#        return (pass);
-#    }
-#    if (obj.http.Set-Cookie) {
-#        return (pass);
-#    }
-#    set obj.prefetch =  -30s;
-#    return (deliver);
-#}
-#
-#sub vcl_deliver {
-#    return (deliver);
-#}
-#
-#sub vcl_discard {
-#    /* XXX: Do not redefine vcl_discard{}, it is not yet supported */
-#    return (discard);
-#}
-#
-#sub vcl_prefetch {
-#    /* XXX: Do not redefine vcl_prefetch{}, it is not yet supported */
-#    return (fetch);
-#}
-#
-#sub vcl_timeout {
-#    /* XXX: Do not redefine vcl_timeout{}, it is not yet supported */
-#    return (discard);
-#}
-#
-#sub vcl_error {
-#    set obj.http.Content-Type = "text/html; charset=utf-8";
-#    synthetic {"
-#<?xml version="1.0" encoding="utf-8"?>
-#<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-# "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-#<html>
-#  <head>
-#    <title>"} obj.status " " obj.response {"</title>
-#  </head>
-#  <body>
-#    <h1>Error "} obj.status " " obj.response {"</h1>
-#    <p>"} obj.response {"</p>
-#    <h3>Guru Meditation:</h3>
-#    <p>XID: "} req.xid {"</p>
-#    <hr>
-#    <address>
-#       <a href="http://www.varnish-cache.org/">Varnish cache server</a>
-#    </address>
-#  </body>
-#</html>
-#"};
-#    return (deliver);
-#}
+
+acl purge {
+  "localhost";
+<% purge_ips.each do |ip| -%>
+   "<%= ip %>";
+<% end -%>
+}
+
+/* Request is received */
+
+/************************* vcl_recv *****************************/
+
+sub vcl_recv {
+  /* Backend pool */
+  set req.backend = drupal;
+
+  /**
+   * Make sure the request is a valid type for us to deal with
+   */
+
+	if (req.request != "GET" &&
+		  req.request != "HEAD" &&
+			req.request != "PUT" &&
+			req.request != "POST" &&
+			req.request != "TRACE" &&
+			req.request != "OPTIONS" &&
+			req.request != "DELETE") {
+		/* Non-RFC2616 or CONNECT which is weird. */
+	  return (pipe);
+	}
+
+	if (req.http.x-varnish-agent) {
+		return (pipe);
+	}
+
+	/* Allow purging */
+	if (req.request == "PURGE") {
+		if (!client.ip ~ purge) {
+      error 405 "Not allowed.";
+		} 
+    return (lookup);
+	}
+
+	/**
+	 * We only deal with GET and HEAD by default
+	 */
+
+	if (req.request != "GET" && req.request != "HEAD") {
+		return (pass);
+	} 
+
+	/** In case backend is healthy, don't grace for long.
+	 *  If backend is down we can serve a bit more stale objects
+	 *  and wait for the backend to come back. If backend is alive
+	 *  we do stale-while-revalidate for 60s.
+	 */
+
+  if (req.backend.healthy) {
+		set req.grace = 60s;
+  }
+	else {
+		set req.grace = 72h;
+  }
+
+  /**
+   * No point in sending cookies to static items.
+   */
+
+	if (req.url ~ "\.(css|js|jpg|jpeg|gif|ico|png|swf)") {
+		remove req.http.cookie;
+		return (lookup);
+	}
+
+	/**
+	 *  Parse accept encoding rulesets to normalize.
+	 */
+
+	if (req.http.Accept-Encoding) {
+		if (req.url ~ "\.(jpg|jpeg|png|gif|gz|tgz|bz2|tbz|mp3|ogg|swf|mp4|flv)") {
+			# Do not try to compress already compressed files.
+			remove req.http.Accept-Encoding;
+   	}
+		elsif (req.http.Accept-Encoding ~ "gzip") {
+			set req.http.Accept-Encoding = "gzip";
+		}
+		elsif (req.http.Accept-Encoding ~ "deflate") {
+			set req.http.Accept-Encoding = "deflate";
+		}
+		else {
+     	# Unkown algorithm.
+			remove req.http.Accept-Encoding;
+   	}
+	}
+
+	if (req.http.Cookie) {
+		# Simplify tokenization
+		# Remove osas and google analytics cookies  TODO. Cleanup
+
+		set req.http.Cookie= regsuball(req.http.Cookie, "(^|; )(\_\_utm.)=[^;]*", "");
+		
+   	if (req.http.Cookie ~ "^;") {
+      set req.http.Cookie = regsuball(req.http.Cookie, "^;", "");
+   	}
+
+		# Finally remove cookie header if it is now empty.
+
+		if (req.http.Cookie == "") {
+			remove req.http.Cookie;
+		}
+	}
+
+  /**
+   * Do not cache auth or cookied requests.
+   */
+
+	if (req.http.Authorization || req.http.Cookie) {
+		return (pass);
+	}
+
+	/**
+   * If we have got this far we should be caching.
+	 */
+
+	if ((req.request == "GET" || req.request == "HEAD") ) {
+		return (lookup);
+	}
+}
+
+/************************* vcl_fetch *****************************/
+
+sub vcl_fetch {
+
+	/* This should be the same value as req.grace when backend is sick */
+
+	set beresp.grace = 72h;
+
+	/* Never use ETag as the files will have slightly different inodes and timestamps on each server */
+
+	unset beresp.http.ETag;
+	unset beresp.http.expires;
+
+	/**
+	* Previous cookie handling removed the entire cookie if a part of it
+	* was invalid. This cookie logic only removes the chips we need
+	*/
+
+	if (beresp.http.Set-Cookie) {
+		# Simplify tokenization
+		set beresp.http.Set-Cookie= regsuball(beresp.http.Set-Cookie, "(^|;)(abc.|asd|erfge|sdcwer|\_\_utm.)=[^;]*", "");
+
+		# Finally remove cookie header if it is now empty.
+		if (beresp.http.Set-Cookie == "") {
+			remove beresp.http.Set-Cookie;
+		}
+	}
+
+	set req.http.x-varnish-agent = "1";
+
+  /**
+   * These items can be dynamically generated. However they very rarely change.
+   * We can afford to purge them if we need to rather than constantly recache them.
+   * Cache them for 3 hours. (10800 seconds)
+   */
+
+	if (req.url ~ "\.(js|jpg|jpeg|gif|ico|png|swf)") {
+		set beresp.http.Cache-Control = "public, max-age=10800";
+		set beresp.ttl = 1d;
+		return(deliver);
+	}
+}
+
+/************************* vcl_hash *****************************/
+
+sub vcl_hash {
+	hash_data(req.url);
+	if (req.http.host) {
+		hash_data(req.http.host);
+	} else {
+		hash_data(server.ip);
+	}
+	return (hash);
+}
+
+/************************* vcl_deliver *****************************/
+
+/* This is called when content is delivered to client */
+
+sub vcl_deliver {
+  if (obj.hits > 0) {
+    set resp.http.X-Cache-Action = "HIT";
+  } else {
+    set resp.http.X-Cache-Action = "MISS";
+  }
+
+  /**
+   * If the object is not a resource we've already bulked up the ttl
+   * then we don't want the browser to cache this
+   * for very long at all.
+   */
+
+	if (resp.http.Cache-Control != "public, max-age=10800") {
+		set resp.http.Cache-Control = "max-age = 10";
+	}
+
+}
+
+/************************* vcl_hit *****************************/
+
+sub vcl_hit {
+  if (req.request == "PURGE") {
+    set obj.ttl = 1s;
+    set obj.grace = 1s;
+    error 200 "Purged.";
+  }
+}
+
+/************************* vcl_miss *****************************/
+
+sub vcl_miss {
+  if (req.request == "PURGE") {
+    error 404 "Not in cache";
+  }
+}
