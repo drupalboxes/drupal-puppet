@@ -19,17 +19,16 @@ define drupal::site(
   $url = null,
   $aliases = []
 ) {
-  $base = ${drupal::params::install_path}
+  $base = $drupal::params::install_path
   $site = "${base}/${drupal::params::sites_dir}/${name}"
-  $platform = "${base}/${drupal::params::platforms_dir}/${platform}"
+  $platform_path = "${base}/${drupal::params::platforms_dir}/${platform}"
   
   $primary_url = $url ? {
     null    => $name,
     default => $url
   }
   
-  $site_link = "${platform}/sites/{$url}"
-  $site_path = "${}
+  $site_link = "${platform_path}/sites/${primary_url}"
   
   file { "${name}_site_dir":
     ensure  => link,
@@ -38,7 +37,7 @@ define drupal::site(
   }
   
   drupal::site_alias { $aliases:
-    platform  => $platform,
+    platform  => $platform_path,
     site      => $name
   }
 }
@@ -47,13 +46,13 @@ define drupal::site_alias(
   $platform,
   $site
 ) {
-  $base = ${drupal::params::install_path}
+  $base = $drupal::params::install_path
   $site = "${base}/${drupal::params::sites_dir}/${site}"
-  $platform = "${base}/${drupal::params::platforms_dir}/${platform}"
+  $platform_path = "${base}/${drupal::params::platforms_dir}/${platform}"
   
   file { $name:
     ensure => link,
     target => $site,
-    path   => "${platform}/sites/${name}"
+    path   => "${platform_path}/sites/${name}"
   }
 }
