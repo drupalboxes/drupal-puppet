@@ -31,28 +31,38 @@ define drupal::site(
   $site_link = "${platform_path}/sites/${primary_url}"
   
   file { "${name}_site_dir":
+    ensure  => directory,
+    path    => $site
+  }
+
+  file { "${name}_site_link":
     ensure  => link,
     path    => $site_link,
     target  => $site
   }
   
-  drupal::site_alias { $aliases:
-    platform  => $platform_path,
-    site      => $name
-  }
-}
+#  drupal::site_alias { $aliases:
+#    platform  => $platform_path,
+#    site      => $name
+#  }
 
-define drupal::site_alias(
-  $platform,
-  $site
-) {
-  $base = $drupal::params::install_path
-  $site = "${base}/${drupal::params::sites_dir}/${site}"
-  $platform_path = "${base}/${drupal::params::platforms_dir}/${platform}"
-  
-  file { $name:
-    ensure => link,
-    target => $site,
-    path   => "${platform_path}/sites/${name}"
+  file { "${name}_settings":
+    ensure  => present,
+    path    => "${site}/settings.php",
+    content => template("drupal/settings.php.erb")
   }
+
+#define drupal::site_alias(
+#  $platform,
+#  $site
+#) {
+#  $base = $drupal::params::install_path
+#  $site = "${base}/${drupal::params::sites_dir}/${site}"
+#  $platform_path = "${base}/${drupal::params::platforms_dir}/${platform}"
+  
+#  file { $name:
+#    ensure => link,
+#    target => $site,
+#    path   => "${platform_path}/sites/${name}"
+#  }
 }

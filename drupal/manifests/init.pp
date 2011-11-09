@@ -33,6 +33,11 @@ class drupal::base {
     path   => "${drupal::params::install_path}/platform_sources",
     ensure => directory
   }
+
+  file { 'sites':
+    path   => "${drupal::params::install_path}/sites",
+    ensure => directory
+  }
 }
 
 class drupal {
