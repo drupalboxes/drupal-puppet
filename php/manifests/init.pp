@@ -17,6 +17,7 @@ class php::config {
   $display_errors = $php::params::display_errors
   $upload_max_filesize = $php::params::upload_max_filesize
   $post_max_size = $php::params::post_max_size
+  $extension_dir = $php::params::extension_dir
 
   file {
     'php.ini':

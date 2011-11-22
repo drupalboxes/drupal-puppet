@@ -7,7 +7,8 @@ class php::params(
   $php_dir              = $php::params::default::php_dir,
   $upload_max_filesize  = $php::params::default::upload_max_filesize,
   $post_max_size        = $php::params::default::post_max_size,
-  $display_errors       = $php::params::default::display_errors
+  $display_errors       = $php::params::default::display_errors,
+  $extension_dir	= $php::params::default::extension_dir
 ) inherits php::params::default {
 
 }

@@ -8,5 +8,5 @@ class php::params::default {
   $upload_max_filesize  = '8M'
   $post_max_size        = '8M'
   $display_errors       = 'Off'
-  
+  $extension_dir	= '/usr/lib64/php/modules' 
 }
