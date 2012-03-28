@@ -1,0 +1,3 @@
+<% if proxy_host != '' %>
+http_proxy=http://<%= proxy_user %><%= proxy_pass != '' ? ':' : ''%><%= proxy_pass %><%= proxy_user != '' ? '@' : '' %><%= proxy_host %>
+<% end %>
