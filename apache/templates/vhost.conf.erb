@@ -1,7 +1,7 @@
 <VirtualHost *:<%= port %>>
   ServerName <%= name %>
-  <% if serveraliases != "" -%>
-   ServerAlias <%= serveraliases %>
+  <% if aliases.length -%>
+   ServerAlias <%= aliases.join(' ') %>
   <% end -%>
   DocumentRoot <%= documentroot %>
   <Location />
