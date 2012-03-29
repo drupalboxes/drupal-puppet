@@ -1,14 +1,14 @@
 define drupal::site_alias(
-  $platform,
+  $drupal_root,
   $site
 ) {
-  $base = $drupal::params::install_path
-  $site_path = "${base}/${drupal::params::sites_dir}/${site}"
-  $platform_path = "${base}/${drupal::params::platforms_dir}/${platform}"
-  notice("Site path: ${site_path} platform path: ${platform_path}")
+
+  $target = "${drupal_root}/sites/${site}"
+  $link = "${drupal_root}/sites/${name}"
+
   file { $name:
     ensure => link,
-    target => $site_path,
-    path   => "${platform_path}/sites/${name}"
+    target => $target,
+    path   => $link
   }
 }

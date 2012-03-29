@@ -42,7 +42,7 @@ define drupal::site(
 
   drupal::site_alias { $aliases:
     drupal_root => $drupal_root,
-    site        => $name
+    site        => $primary_url
   }
 
   file { "${name}_settings":
