@@ -4,6 +4,9 @@
    ServerAlias <%= aliases.join(' ') %>
   <% end -%>
   DocumentRoot <%= documentroot %>
+  <Directory <%= documentroot %>>
+    AllowOverride all
+  </Directory>
   <Location />
     Options +Includes
   </Location>

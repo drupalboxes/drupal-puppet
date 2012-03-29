@@ -1,5 +1,5 @@
 
-define apache::vhost( $port, $documentroot, $ssl = false, $template='apache/vhost.conf.erb', $priority = '0', $aliases = [] , $enable=true) {
+define apache::vhost( $port, $documentroot, $ssl = false, $template='apache/vhost.conf.erb', $priority = '1', $aliases = [] , $enable=true) {
   file {"${apache::params::vhostdir}/${priority}-${name}.conf":
     content   => template($template),
  #   mode      => "${apache::params::configfile_mode}",
