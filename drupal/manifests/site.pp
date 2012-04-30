@@ -42,13 +42,15 @@ define drupal::site(
 
   drupal::site_alias { $aliases:
     drupal_root => $drupal_root,
-    site        => $primary_url
+    site        => $primary_url,
+    require     => File["${name}_site_dir"]
   }
 
   file { "${name}_settings":
     ensure  => present,
     path    => "${site}/settings.php",
-    content => template("drupal/settings.php.erb")
+    content => template("drupal/settings.php.erb"),
+    require => File["${name}_site_dir"]
   }
 
   apache::vhost { $primary_url:

@@ -107,7 +107,7 @@ ini_set('session.cookie_lifetime', 2000000);
 
 include DRUPAL_ROOT . '/sites/all/modules/contrib/domain/settings.inc';
 
-$conf = <%
+$conf = array_merge($conf, <%
 
 def hash_to_php_array(h, indent)
   values = []
@@ -134,7 +134,7 @@ def hash_to_php_array(h, indent)
 end
 
 -%>
-<%= hash_to_php_array(conf, 1) -%>;
+<%= hash_to_php_array(conf, 1) -%>);
 
 $conf['404_fast_paths_exclude'] = '/\/(?:styles)\//';
 $conf['404_fast_paths'] = '/\.(?:txt|png|gif|jpe?g|css|js|ico|swf|flv|cgi|bat|pl|dll|exe|asp)$/i';
