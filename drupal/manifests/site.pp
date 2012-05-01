@@ -1,9 +1,6 @@
 
 define drupal::site(
-  $db_name,
-  $db_user,
-  $db_password,
-  $db_host,
+  $databases,
   $drupal_root,
   $conf = { },
   $url = null,
