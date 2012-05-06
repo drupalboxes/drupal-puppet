@@ -8,9 +8,9 @@ obsoletes=1
 gpgcheck=1
 plugins=1
 installonly_limit=3
-proxy=<%= proxy_host %>
-proxy_username=<%= proxy_user %>
-proxy_password=<%= proxy_pass %>
+<% if proxy_host != '' %>proxy=<%= proxy_host %><% end %>
+<% if proxy_user != '' %>proxy_username=<%= proxy_user %><% end %>
+<% if proxy_pass != '' %>proxy_password=<%= proxy_pass %><% end %>
 
 #  This is the default, if you make this bigger yum won't see if the metadata
 # is newer on the remote and so you'll "gain" the bandwidth of not having to
