@@ -58,4 +58,17 @@ class mysql::server::config {
       "set write_buffer ${mysql::server::params::myisamchk_write_buffer}",
     ],
   }
+
+  $pass = $mysql::server::params::mysqld_root_password
+
+  if $pass == 'password' {
+    warning('MySQL root password is set to the default password.')
+  }
+
+  exec { "set-mysql-password":
+    unless => "mysqladmin -uroot -p${pass} status",
+    path => ["/bin", "/usr/bin"],
+    command => "mysqladmin -uroot password ${pass}",
+    require => Class['mysql::server::service']
+  }
 }

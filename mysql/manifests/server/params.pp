@@ -1,5 +1,7 @@
 
 class mysql::server::params(
+  $mysqld_root_password = 'password',  
+
   $mysqld_key_buffer_size          = '8M',
   $mysqld_max_allowed_packet       = '8M',
   $mysqld_table_open_cache         = '1024',
