@@ -8,7 +8,7 @@ define pear::package(
   } else {
     $pear_source = "${repository}/${package}"
   }
-  notice("${pear_source}")
+
   package { "pear-${repository}-${package}":
     name => $package,
     provider => "pear",
