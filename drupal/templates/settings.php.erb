@@ -119,8 +119,6 @@ ini_set('session.gc_maxlifetime', 200000);
  */
 ini_set('session.cookie_lifetime', 2000000);
 
-include DRUPAL_ROOT . '/sites/all/modules/contrib/domain/settings.inc';
-
 $conf = array_merge($conf, <%= hash_to_php_array(conf, 1) -%>);
 
 $conf['404_fast_paths_exclude'] = '/\/(?:styles)\//';
